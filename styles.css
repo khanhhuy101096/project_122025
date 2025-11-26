@@ -301,8 +301,7 @@ body {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.25);
 }
 .hero-names .name { display: inline-block; }
-.hero-names .bride { color: #ffc0cb; }
-.hero-names .groom { color: #87ceeb; }
+.hero-names .bride, .hero-names .groom { color: #fff; }
 .hero-amp {
     width: 42px;
     height: 42px;
@@ -636,6 +635,63 @@ body {
 @media (max-width: 480px) {
     .family-title h3 { font-size: 18px; }
     .field-value { font-size: 14px; }
+}
+
+/* ===== COUPLE OVERLAY STYLES ===== */
+.couple-ribbon {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+.couple-ribbon.bride { background: linear-gradient(135deg, var(--secondary-color), #ff7aa9); }
+.couple-ribbon.groom { background: linear-gradient(135deg, var(--primary-color), #64b5f6); }
+
+.couple-name {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+
+.couple-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.couple-chips .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #fff;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+}
+.couple-chips .chip i { font-size: 16px; color: #fff; }
+
+.image-overlay-container:hover .overlay-image { transform: scale(1.02); }
+.image-overlay-container:hover .image-text-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 38%, rgba(0,0,0,0.18) 72%, rgba(0,0,0,0) 100%);
+}
+
+@media (max-width: 768px) {
+    .couple-name { font-size: 20px; }
+}
+@media (max-width: 480px) {
+    .couple-name { font-size: 18px; }
 }
 
 /* ===== COUNTDOWN SECTION ===== */
@@ -1236,6 +1292,12 @@ body {
     cursor: pointer;
     transition: var(--transition);
     box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: auto;
+    line-height: 1;
 }
 
 .btn-submit:hover {
