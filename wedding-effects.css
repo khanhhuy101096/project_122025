@@ -1,0 +1,669 @@
+/* ==========================================
+   WEDDING SPECIAL EFFECTS
+   ========================================== */
+
+/* ==========================================
+   1. FALLING FLOWER PETALS ANIMATION
+   ========================================== */
+
+.flower-petal {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10vh) translateX(0) rotateZ(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) translateX(100px) rotateZ(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes sway {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(30px);
+    }
+}
+
+.petal-fall {
+    animation: fall linear infinite;
+}
+
+.petal-sway {
+    animation: sway 3s ease-in-out infinite;
+}
+
+/* ==========================================
+   2. FLOATING HEARTS ANIMATION
+   ========================================== */
+
+.floating-heart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 2rem;
+    z-index: 1;
+}
+
+@keyframes float-up {
+    0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(50px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.heart-float {
+    animation: float-up 3s ease-out forwards;
+}
+
+/* ==========================================
+   3. SPARKLE/GLITTER EFFECT
+   ========================================== */
+
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.sparkle {
+    position: absolute;
+    pointer-events: none;
+    animation: sparkle 0.6s ease-out forwards;
+}
+
+.twinkle-effect {
+    animation: twinkle 1.5s ease-in-out infinite;
+}
+
+/* ==========================================
+   4. ROMANTIC PARTICLE EFFECTS
+   ========================================== */
+
+@keyframes particle-rise {
+    0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-200px) translateX(var(--tx)) scale(0);
+        opacity: 0;
+    }
+}
+
+.particle {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    animation: particle-rise 1.5s ease-out forwards;
+}
+
+/* ==========================================
+   5. ENHANCED HERO SECTION ANIMATIONS
+   ========================================== */
+
+@keyframes hero-title-appear {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes hero-scale-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(233, 30, 99, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(233, 30, 99, 0);
+    }
+}
+
+.hero-names {
+    animation: hero-title-appear 1s ease-out 0.3s both;
+}
+
+.hero-amp {
+    animation: pulse-glow 2s infinite;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.hero-amp i {
+    color: #e91e63;
+    font-size: 22px;
+    line-height: 1;
+}
+
+/* ==========================================
+   6. RING ANIMATION FOR COUPLE NAMES
+   ========================================== */
+
+@keyframes ring-spin {
+    0% {
+        transform: rotateY(0deg) rotateX(0deg);
+    }
+    100% {
+        transform: rotateY(360deg) rotateX(10deg);
+    }
+}
+
+@keyframes ring-glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(233, 30, 99, 0.5));
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(233, 30, 99, 1));
+    }
+}
+
+.couple-ring {
+    display: inline-block;
+    animation: ring-glow 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   7. CONFETTI EFFECT
+   ========================================== */
+
+/* FIREWORKS CANVAS */
+.fireworks-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 998; /* dưới lightbox (2000), trên nền */
+}
+
+/* FIREWORKS TRAIL */
+.firework-trail {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 120px;
+    transform: translateX(-50%);
+    background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.9));
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 215, 0, 0.6);
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 999;
+    mix-blend-mode: screen;
+}
+
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) translateX(0) rotateZ(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(500px) translateX(var(--tx)) rotateZ(var(--rotation));
+        opacity: 0;
+    }
+}
+
+.confetti {
+    position: fixed;
+    pointer-events: none;
+    animation: confetti-fall 3s ease-in forwards;
+}
+
+/* ==========================================
+   8. BUTTON HOVER EFFECTS
+   ========================================== */
+
+@keyframes button-glow {
+    0% {
+        box-shadow: 0 0 5px rgba(233, 30, 99, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(233, 30, 99, 1);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(233, 30, 99, 0.5);
+    }
+}
+
+.btn-theme-primary:hover,
+.btn-theme-secondary:hover {
+    animation: button-glow 0.6s ease-in-out;
+}
+
+/* ==========================================
+   9. CARD ENTRANCE ANIMATIONS
+   ========================================== */
+
+@keyframes card-entrance {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.event-card,
+.gift-card,
+.gallery-item {
+    animation: card-entrance 0.6s ease-out;
+}
+
+.event-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.event-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.event-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* ==========================================
+   10. SECTION TITLE ANIMATIONS
+   ========================================== */
+
+@keyframes title-underline {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+.section-title {
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e91e63, #9c27b0);
+    animation: title-underline 0.8s ease-out forwards;
+}
+
+/* ==========================================
+   11. LOVE LETTER EFFECT
+   ========================================== */
+
+@keyframes letter-open {
+    0% {
+        transform: rotateX(0deg);
+        opacity: 0;
+    }
+    100% {
+        transform: rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+.letter-effect {
+    animation: letter-open 0.8s ease-out;
+}
+
+/* ==========================================
+   12. COUNTDOWN TIMER PULSE
+   ========================================== */
+
+@keyframes countdown-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.countdown-number {
+    animation: countdown-pulse 1s ease-in-out infinite;
+}
+
+/* ==========================================
+   13. ROMANTIC BORDER GLOW
+   ========================================== */
+
+@keyframes border-glow {
+    0%, 100% {
+        border-color: rgba(233, 30, 99, 0.5);
+        box-shadow: 0 0 5px rgba(233, 30, 99, 0.3);
+    }
+    50% {
+        border-color: rgba(233, 30, 99, 1);
+        box-shadow: 0 0 15px rgba(233, 30, 99, 0.6);
+    }
+}
+
+.romantic-border {
+    animation: border-glow 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   14. HOVER LIFT EFFECT
+   ========================================== */
+
+@keyframes lift {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+.hover-lift:hover {
+    animation: lift 0.3s ease-out forwards;
+}
+
+/* ==========================================
+   15. MUSIC NOTE ANIMATION
+   ========================================== */
+
+@keyframes music-note-bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.music-btn.playing {
+    animation: music-note-bounce 0.6s ease-in-out infinite;
+}
+
+/* ==========================================
+   16. GRADIENT ANIMATION
+   ========================================== */
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-animate {
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+}
+
+/* ==========================================
+   17. ROMANTIC WAVE EFFECT
+   ========================================== */
+
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.wave-effect {
+    animation: wave 1.5s ease-in-out infinite;
+}
+
+.wave-effect:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.wave-effect:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.wave-effect:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* ==========================================
+   18. SHIMMER EFFECT
+   ========================================== */
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.shimmer-effect {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ==========================================
+   19. ROMANTIC FADE IN
+   ========================================== */
+
+@keyframes romantic-fade-in {
+    0% {
+        opacity: 0;
+        filter: blur(5px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+.romantic-fade {
+    animation: romantic-fade-in 1.5s ease-out;
+}
+
+/* ==========================================
+   20. HEART BEAT EFFECT
+   ========================================== */
+
+/* ==========================================
+   PREMIUM WEDDING THEME (Elegant/Gold)
+   ========================================== */
+
+/* Color overrides for premium look */
+body.premium-theme {
+    --primary-color: #1f2a2e; /* deep blue/green */
+    --secondary-color: #D4AF37; /* premium gold */
+    --accent-color: #E0C66E; /* soft gold */
+    --text-color: #222;
+}
+
+/* Page subtle fade-in */
+body.premium-fade-in {
+    animation: premium-page-fade 600ms ease-out both;
+}
+
+@keyframes premium-page-fade {
+    from { opacity: 0; filter: blur(4px); }
+    to   { opacity: 1; filter: blur(0); }
+}
+
+/* Hero premium overlay and vignette */
+body.premium-theme .hero-overlay {
+    background: radial-gradient(60% 50% at 50% 35%, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 80%, rgba(0,0,0,0.6) 100%);
+}
+
+/* Section titles with gold underline */
+body.premium-theme .section-title::after {
+    background: linear-gradient(90deg, #D4AF37, #E7D28B, #B8860B);
+    height: 4px;
+}
+
+/* Premium glass cards */
+body.premium-theme .event-card,
+body.premium-theme .gift-card,
+body.premium-theme .timeline-item {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.03) inset;
+}
+
+/* Premium button sheen */
+body.premium-theme .btn-theme-primary,
+body.premium-theme .btn-open {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    border: none;
+}
+
+body.premium-theme .btn-theme-primary::after,
+body.premium-theme .btn-open::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    height: 100%;
+    width: 120%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+    transform: skewX(-20deg);
+    transition: transform 0.7s ease, left 0.7s ease;
+}
+
+body.premium-theme .btn-theme-primary:hover::after,
+body.premium-theme .btn-open:hover::after {
+    left: 120%;
+}
+
+/* Premium golden border glow on hover */
+body.premium-theme .event-card:hover,
+body.premium-theme .gift-card:hover,
+body.premium-theme .timeline-item:hover {
+    box-shadow: 0 16px 36px rgba(0,0,0,0.22), 0 0 20px rgba(212,175,55,0.35);
+}
+
+/* Golden particles (subtle, drifting) */
+.golden-particle {
+    position: fixed;
+    width: var(--gp-size, 3px);
+    height: var(--gp-size, 3px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(224,198,110,0.95), rgba(212,175,55,0.0) 70%);
+    pointer-events: none;
+    z-index: 2;
+    filter: blur(0.2px);
+    animation: golden-drift var(--gp-duration, 12s) ease-in forwards, golden-twinkle 2.6s ease-in-out infinite;
+}
+
+@keyframes golden-drift {
+    0%   { transform: translateY(0) translateX(0) scale(0.8); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.8; }
+    100% { transform: translateY(-120px) translateX(var(--gp-tx, 40px)) scale(1.1); opacity: 0; }
+}
+
+@keyframes golden-twinkle {
+    0%, 100% { filter: brightness(1); opacity: 0.7; }
+    50%      { filter: brightness(1.4); opacity: 1; }
+}
+
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
+.heartbeat {
+    animation: heartbeat 1.3s ease-in-out infinite;
+}
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================== */
+
+@media (max-width: 768px) {
+    .flower-petal {
+        font-size: 1.5rem;
+    }
+
+    .floating-heart {
+        font-size: 1.5rem;
+    }
+
+    .hero-amp i {
+        font-size: 1.8rem;
+    }
+
+    @keyframes confetti-fall {
+        0% {
+            transform: translateY(0) translateX(0) rotateZ(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(300px) translateX(var(--tx)) rotateZ(var(--rotation));
+            opacity: 0;
+        }
+    }
+}
+

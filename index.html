@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="styles.css">
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="wedding-effects.css">
 </head>
 <body class="theme-indigo-pink">
     <!-- Theme Switcher -->
@@ -33,30 +34,30 @@
     </div>
 
     <!-- 1. HERO SECTION -->
-    <section id="hero" class="hero parallax-container">
+    <section id="hero" class="hero hero-premium parallax-container">
         <div class="parallax"><img src="images/home/LEO05346_min.jpg" alt="Wedding Photo" class="hero-img"></div>
-            <div class="hero-overlay"></div>
-        
+        <div class="hero-overlay"></div>
+
         <div class="hero-content">
             <div class="hero-text">
                 <div class="hero-header">
-                    <span class="hero-pill">Chúng tôi sẽ kết hôn</span>
+                    <span class="hero-pill hero-brand">The Wedding of</span>
                 </div>
 
-                <div class="hero-names">
+                <h1 class="hero-names">
                     <span class="name groom">Khánh Huy</span>
                     <span class="hero-amp" aria-hidden="true"><i class="material-icons">favorite</i></span>
-                    <span class="name groom">Ngọc Ánh</span>
-                </div>
+                    <span class="name bride">Ngọc Ánh</span>
+                </h1>
 
                 <div class="hero-meta">
-                    <span class="meta-chip"><i class="material-icons" aria-hidden="true">event</i> 10:00 sáng Ngày 09 tháng 12 năm 2025</span>
+                    <span class="meta-chip"><i class="material-icons" aria-hidden="true">event</i> 10:00 09/12/2025</span>
+                    <span class="meta-chip"><i class="material-icons" aria-hidden="true">place</i> Kỳ Phú, Kỳ Anh, Hà Tĩnh</span>
                 </div>
 
                 <p class="hero-quote">"Tình yêu là khi bạn gặp ai đó mà bạn muốn ở bên cạnh họ mãi mãi"</p>
 
                 <div class="hero-countdown">
-                    <!-- <h3 class="hero-countdown-title">Còn lại</h3> -->
                     <div class="countdown" id="countdown">
                         <div class="countdown-item z-depth-2">
                             <span class="countdown-number" id="days">0</span>
@@ -77,10 +78,15 @@
                     </div>
                 </div>
 
-                <button class="btn-open btn waves-effect waves-light btn-theme-primary" onclick="smoothScroll('story')">
-                    <span>Mở Thiệp</span>
-                    <i class="material-icons" aria-hidden="true">expand_more</i>
-                </button>
+                <div class="hero-cta">
+                    <button class="btn-open btn waves-effect waves-light btn-theme-primary" onclick="smoothScroll('story')">
+                        <span>Mở Thiệp</span>
+                        <i class="material-icons" aria-hidden="true">expand_more</i>
+                    </button>
+                    <a class="btn btn-flat waves-effect btn-theme-secondary" href="#gallery" aria-label="Xem album ảnh">
+                        <i class="material-icons left" aria-hidden="true">photo_camera</i> Xem Album
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -88,8 +94,6 @@
             <span>Cuộn xuống</span>
             <i class="material-icons" aria-hidden="true">keyboard_arrow_down</i>
         </div> -->
-
-        
     </section>
 
 
@@ -114,7 +118,7 @@
                     <div class="timeline-content">
                         <div class="image-overlay-container">
                             <span class="couple-ribbon groom">Chú rể</span>
-                            <img src="images/single/chure.JPG" alt="Chú Rể" class="overlay-image">
+                            <img src="images/single/chure.jpg" alt="Chú Rể" class="overlay-image">
                             <div class="image-text-overlay">
                                 <h3 class="couple-name">Nguyễn Khánh Huy</h3>
                                 <div class="couple-chips">
@@ -135,7 +139,7 @@
                     <div class="timeline-content">
                         <div class="image-overlay-container">
                             <span class="couple-ribbon bride">Cô dâu</span>
-                            <img src="images/single/codau.JPG" alt="Cô Dâu" class="overlay-image">
+                            <img src="images/single/codau.jpg" alt="Cô Dâu" class="overlay-image">
                             <div class="image-text-overlay">
                                 <h3 class="couple-name">Nguyễn Thị Ngọc Ánh</h3>
                                 <div class="couple-chips">
@@ -414,145 +418,94 @@
         </div>
     </section>
 
-    <!-- 5. GALLERY SECTION -->
+    <!-- 5. GALLERY SECTION - CAROUSEL -->
     <section id="gallery" class="gallery">
         <div class="container">
             <h2 class="section-title">Album Ảnh</h2>
             
-            <div class="gallery-grid">
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(0)">
-                    <img src="images/album/LEO04375.JPG" alt="Album Photo 1" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+            <div class="gallery-carousel-wrapper">
+                <div class="gallery-carousel" id="galleryCarousel">
+                    <div class="gallery-item" onclick="openLightbox(0)">
+                        <img src="images/album/LEO04381.jpg" alt="Album Photo 1" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(1)">
+                        <img src="images/album/LEO04432.jpg" alt="Album Photo 2" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(2)">
+                        <img src="images/album/LEO04456.jpg" alt="Album Photo 3" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(3)">
+                        <img src="images/album/LEO04474.jpg" alt="Album Photo 4" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(4)">
+                        <img src="images/album/LEO04517.jpg" alt="Album Photo 5" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(5)">
+                        <img src="images/album/LEO04584.jpg" alt="Album Photo 6" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(6)">
+                        <img src="images/album/LEO04639.jpg" alt="Album Photo 7" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(7)">
+                        <img src="images/album/LEO04660.jpg" alt="Album Photo 8" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(8)">
+                        <img src="images/album/LEO04670.jpg" alt="Album Photo 9" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(9)">
+                        <img src="images/album/LEO04711.jpg" alt="Album Photo 10" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(10)">
+                        <img src="images/album/LEO04884.jpg" alt="Album Photo 11" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(11)">
+                        <img src="images/album/LEO05016.jpg" alt="Album Photo 12" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(12)">
+                        <img src="images/album/LEO05047.jpg" alt="Album Photo 13" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(13)">
+                        <img src="images/album/LEO05278.jpg" alt="Album Photo 14" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(14)">
+                        <img src="images/album/LEO05374.jpg" alt="Album Photo 15" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(15)">
+                        <img src="images/album/LEO05423.jpg" alt="Album Photo 16" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(16)">
+                        <img src="images/album/LEO05465.jpg" alt="Album Photo 17" loading="lazy">
+                        <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
+                    </div>
                 </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(1)">
-                    <img src="images/album/LEO04381.JPG" alt="Album Photo 2" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(2)">
-                    <img src="images/album/LEO04393.JPG" alt="Album Photo 3" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(3)">
-                    <img src="images/album/LEO04432.JPG" alt="Album Photo 4" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(4)">
-                    <img src="images/album/LEO04456.JPG" alt="Album Photo 5" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(5)">
-                    <img src="images/album/LEO04474.JPG" alt="Album Photo 6" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div> 
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(6)">
-                    <img src="images/album/LEO04517.JPG" alt="Album Photo 7" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(7)">
-                    <img src="images/album/LEO04584.JPG" alt="Album Photo 8" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(8)">
-                    <img src="images/album/LEO04598.JPG" alt="Album Photo 9" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(9)">
-                    <img src="images/album/LEO04627.JPG" alt="Album Photo 10" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(10)">
-                    <img src="images/album/LEO04639.JPG" alt="Album Photo 11" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(11)">
-                    <img src="images/album/LEO04660.JPG" alt="Album Photo 12" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(12)">
-                    <img src="images/album/LEO04670.JPG" alt="Album Photo 13" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(13)">
-                    <img src="images/album/LEO04711.JPG" alt="Album Photo 14" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(14)">
-                    <img src="images/album/LEO04726.JPG" alt="Album Photo 15" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(15)">
-                    <img src="images/album/LEO04727.JPG" alt="Album Photo 16" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(16)">
-                    <img src="images/album/LEO04776.JPG" alt="Album Photo 17" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(17)">
-                    <img src="images/album/LEO04850.JPG" alt="Album Photo 18" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(18)">
-                    <img src="images/album/LEO04884.JPG" alt="Album Photo 19" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(19)">
-                    <img src="images/album/LEO04951.JPG" alt="Album Photo 20" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(20)">
-                    <img src="images/album/LEO04985.JPG" alt="Album Photo 21" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(21)">
-                    <img src="images/album/LEO05012.JPG" alt="Album Photo 22" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(22)">
-                    <img src="images/album/LEO05016.JPG" alt="Album Photo 23" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(23)">
-                    <img src="images/album/LEO05047.JPG" alt="Album Photo 24" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(24)">
-                    <img src="images/album/LEO05050.JPG" alt="Album Photo 25" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(25)">
-                    <img src="images/album/LEO05069.JPG" alt="Album Photo 26" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(26)">
-                    <img src="images/album/LEO05149.JPG" alt="Album Photo 27" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <!-- <div class="gallery-item waves-effect waves-light" onclick="openLightbox(27)">
-                    <img src="images/album/LEO05149.jpg" alt="Album Photo 28" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div> -->
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(28)">
-                    <img src="images/album/LEO05278.jpg" alt="Album Photo 29" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(29)">
-                    <img src="images/album/LEO05291.JPG" alt="Album Photo 30" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(30)">
-                    <img src="images/album/LEO05374.JPG" alt="Album Photo 31" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(31)">
-                    <img src="images/album/LEO05423.JPG" alt="Album Photo 32" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
-                <div class="gallery-item waves-effect waves-light" onclick="openLightbox(32)">
-                    <img src="images/album/LEO05465.JPG" alt="Album Photo 33" loading="lazy">
-                    <div class="gallery-overlay"><i class="material-icons" aria-hidden="true">zoom_in</i></div>
-                </div>
+                
+                <!-- Navigation Buttons -->
+                <button class="carousel-btn carousel-prev" onclick="scrollCarousel(-1)" aria-label="Ảnh trước">
+                    <i class="material-icons" aria-hidden="true">chevron_left</i>
+                </button>
+                <button class="carousel-btn carousel-next" onclick="scrollCarousel(1)" aria-label="Ảnh sau">
+                    <i class="material-icons" aria-hidden="true">chevron_right</i>
+                </button>
             </div>
+            
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators" id="carouselIndicators"></div>
         </div>
     </section>
 
@@ -703,6 +656,7 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="wedding-effects.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

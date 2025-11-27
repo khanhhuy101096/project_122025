@@ -50,6 +50,63 @@ function smoothScroll(target) {
     }
 }
 
+// ===== GALLERY CAROUSEL =====
+let carouselScrollPosition = 0;
+
+function scrollCarousel(direction) {
+    const carousel = document.getElementById('galleryCarousel');
+    const firstItem = carousel.querySelector('.gallery-item');
+    if (!firstItem) return;
+    const itemWidth = firstItem.offsetWidth + 15; // 15px gap
+    const scrollAmount = itemWidth * 3; // Scroll 3 items at a time
+    
+    carousel.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth'
+    });
+}
+
+function updateCarouselIndicators() {
+    const carousel = document.getElementById('galleryCarousel');
+    if (!carousel) return;
+    const items = carousel.querySelectorAll('.gallery-item');
+    const indicatorsContainer = document.getElementById('carouselIndicators');
+    if (!indicatorsContainer || items.length === 0) return;
+
+    // Prevent attaching multiple listeners/indicators
+    if (carousel.dataset.indicatorsInitialized === 'true') return;
+    carousel.dataset.indicatorsInitialized = 'true';
+    
+    // Create indicators
+    const totalGroups = Math.ceil(items.length / 3);
+    for (let i = 0; i < totalGroups; i++) {
+        const indicator = document.createElement('div');
+        indicator.className = 'carousel-indicator';
+        if (i === 0) indicator.classList.add('active');
+        indicator.onclick = () => scrollToCarouselGroup(i);
+        indicatorsContainer.appendChild(indicator);
+    }
+    
+    // Update active indicator on scroll
+    carousel.addEventListener('scroll', () => {
+        const scrollLeft = carousel.scrollLeft;
+        const itemWidth = items[0].offsetWidth + 15;
+        const activeGroup = Math.round(scrollLeft / (itemWidth * 3));
+        
+        document.querySelectorAll('.carousel-indicator').forEach((ind, idx) => {
+            ind.classList.toggle('active', idx === activeGroup);
+        });
+    }, { passive: true });
+}
+
+function scrollToCarouselGroup(groupIndex) {
+    const carousel = document.getElementById('galleryCarousel');
+    const itemWidth = carousel.querySelector('.gallery-item').offsetWidth + 15;
+    const scrollAmount = itemWidth * 3 * groupIndex;
+    
+    carousel.scrollLeft = scrollAmount;
+}
+
 // ===== GALLERY LIGHTBOX =====
 // Will be filled from DOM to keep HTML as the source of truth
 let galleryImages = [];
@@ -374,8 +431,11 @@ document.addEventListener('DOMContentLoaded', function() {
         window.removeEventListener('scroll', null);
     }
     
-    // Build lightbox image list from static HTML thumbnails
-    galleryImages = Array.from(document.querySelectorAll('.gallery-grid .gallery-item img')).map(img => img.getAttribute('src'));
+    // Build lightbox image list from carousel
+    galleryImages = Array.from(document.querySelectorAll('.gallery-carousel .gallery-item img')).map(img => img.getAttribute('src'));
+    
+    // Initialize carousel indicators
+    updateCarouselIndicators();
 
     // Apply fade-in animations to gallery items (static HTML)
     document.querySelectorAll('.gallery-item').forEach(el => {
