@@ -1,38 +1,98 @@
-// ============================================
-// INVITATION CARD FUNCTIONALITY
-// ============================================
+/* ============================================
+   INVITATION CARD MODULE (Refactored)
+   ============================================ */
+(function() {
+  'use strict';
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeInvitation();
-});
+  // ----------------------
+  // Config
+  // ----------------------
+  const Config = {
+    redirectTarget: 'main.html',
+    fadeOutMs: 500,
+    sparkle: {
+      initialCount: 24,
+      intervalMs: 500,
+      burstCount: 30,
+      burstStepMs: 30,
+      minDuration: 2,
+      maxDuration: 4
+    },
+  };
 
-function initializeInvitation() {
-    // Hide loading indicator after page loads
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    setTimeout(() => {
-        loadingIndicator.classList.add('hidden');
-    }, 1000);
+  // Runtime state (no globals)
+  const State = {
+    opened: false,
+    resizeTO: null,
+    intervals: [],
+    timeouts: [],
+    listeners: [],
+  };
 
-    // Size card wrapper to match background image dimensions (scaled to viewport)
+  // Utilities to manage timers/listeners for cleanup
+  const addTimeout = (fn, delay) => {
+    const id = setTimeout(fn, delay);
+    State.timeouts.push(id);
+    return id;
+  };
+  const addInterval = (fn, interval) => {
+    const id = setInterval(fn, interval);
+    State.intervals.push(id);
+    return id;
+  };
+  const addListener = (target, type, handler, opts) => {
+    target.addEventListener(type, handler, opts);
+    State.listeners.push(() => target.removeEventListener(type, handler, opts));
+  };
+  const cleanup = () => {
+    State.timeouts.forEach(clearTimeout);
+    State.intervals.forEach(clearInterval);
+    State.listeners.forEach(off => off());
+    State.timeouts = [];
+    State.intervals = [];
+    State.listeners = [];
+  };
+
+  const prefersReducedMotion = () =>
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ----------------------
+  // Init
+  // ----------------------
+  addListener(document, 'DOMContentLoaded', initialize);
+
+  function initialize() {
+    hideLoaderSoon();
     sizeCardToCover();
 
-    // Initialize sparkles
-    createSparkles();
+    if (!prefersReducedMotion()) {
+      startSparkles();
+    }
 
-    // Setup event listeners
-    setupEventListeners();
+    setupInteractions();
+    setupMusic();
+    prefetchMain();
 
-    // Initialize music
-    initializeMusic();
+    // Clean up on page hide/unload
+    addListener(window, 'pagehide', cleanup, { passive: true });
+    addListener(window, 'beforeunload', cleanup, { passive: true });
+  }
 
-    // No manual button; auto-redirect handled after animation
-}
+  // ----------------------
+  // Loader
+  // ----------------------
+  function hideLoaderSoon() {
+    const el = document.getElementById('loadingIndicator');
+    if (!el) return;
+    addTimeout(() => {
+      el.classList.add('hidden');
+    }, 700);
+  }
 
-// ============================================
-// CARD SIZE FIT TO BACKGROUND IMAGE
-// ============================================
-
-function sizeCardToCover() {
+  // ----------------------
+  // Size card to cover image
+  // ----------------------
+  function sizeCardToCover() {
     const wrapper = document.getElementById('cardWrapper');
     const cover = document.getElementById('cardCover');
     if (!wrapper || !cover) return;
@@ -41,312 +101,253 @@ function sizeCardToCover() {
     const maxW = Math.min(window.innerWidth * 0.92, 1200);
     const maxH = Math.min(window.innerHeight * 0.88, 1600);
 
-    const applySizeFromDims = (imgW, imgH) => {
-        const s = Math.min(maxW / imgW, maxH / imgH, 1); // don't upscale beyond natural size
-        const w = Math.round(imgW * s);
-        const h = Math.round(imgH * s);
-        wrapper.style.width = w + 'px';
-        wrapper.style.height = h + 'px';
+    const apply = (imgW, imgH) => {
+      const s = Math.min(maxW / imgW, maxH / imgH, 1);
+      wrapper.style.width = Math.round(imgW * s) + 'px';
+      wrapper.style.height = Math.round(imgH * s) + 'px';
     };
 
     const cachedW = wrapper.getAttribute('data-img-w');
     const cachedH = wrapper.getAttribute('data-img-h');
     if (cachedW && cachedH) {
-        applySizeFromDims(parseInt(cachedW, 10), parseInt(cachedH, 10));
-        return;
-    }
-
-    if (!src) return;
-    const img = new Image();
-    img.onload = () => {
+      apply(parseInt(cachedW, 10), parseInt(cachedH, 10));
+    } else if (src) {
+      const img = new Image();
+      img.onload = () => {
         const imgW = img.naturalWidth || 1000;
         const imgH = img.naturalHeight || 1400;
         wrapper.setAttribute('data-img-w', String(imgW));
         wrapper.setAttribute('data-img-h', String(imgH));
-        applySizeFromDims(imgW, imgH);
-    };
-    img.src = src;
-}
-
-let __resizeTO;
-window.addEventListener('resize', () => {
-    clearTimeout(__resizeTO);
-    __resizeTO = setTimeout(sizeCardToCover, 150);
-});
-
-// ============================================
-// SPARKLES EFFECT
-// ============================================
-
-function createSparkles() {
-    const container = document.getElementById('sparklesContainer');
-    const sparkleCount = 24;
-
-    for (let i = 0; i < sparkleCount; i++) {
-        setTimeout(() => {
-            createSparkle(container);
-        }, i * 200);
+        apply(imgW, imgH);
+      };
+      img.src = src;
     }
+  }
 
+  const onResize = () => {
+    clearTimeout(State.resizeTO);
+    State.resizeTO = addTimeout(sizeCardToCover, 150);
+  };
+  addListener(window, 'resize', onResize, { passive: true });
+
+  // ----------------------
+  // Sparkles
+  // ----------------------
+  function startSparkles() {
+    const container = document.getElementById('sparklesContainer');
+    if (!container) return;
+
+    const initial = Math.max(0, Config.sparkle.initialCount);
+    for (let i = 0; i < initial; i++) {
+      addTimeout(() => createSparkle(container), i * 200);
+    }
     // Continue creating sparkles
-    setInterval(() => {
-        createSparkle(container);
-    }, 500);
-}
+    addInterval(() => createSparkle(container), Config.sparkle.intervalMs);
+  }
 
-function createSparkle(container) {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle';
+  function createSparkle(container) {
+    const el = document.createElement('div');
+    el.className = 'sparkle';
 
     const x = Math.random() * window.innerWidth;
     const y = Math.random() * window.innerHeight;
 
-    sparkle.style.left = x + 'px';
-    sparkle.style.top = y + 'px';
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
 
     const tx = (Math.random() - 0.5) * 100;
     const ty = (Math.random() - 0.5) * 100;
+    el.style.setProperty('--tx', tx + 'px');
+    el.style.setProperty('--ty', ty + 'px');
 
-    sparkle.style.setProperty('--tx', tx + 'px');
-    sparkle.style.setProperty('--ty', ty + 'px');
+    const dur = Config.sparkle.minDuration + Math.random() * (Config.sparkle.maxDuration - Config.sparkle.minDuration);
+    el.style.animationDuration = dur + 's';
 
-    const duration = 2 + Math.random() * 2;
-    sparkle.style.animationDuration = duration + 's';
+    container.appendChild(el);
+    addTimeout(() => el.remove(), dur * 1000);
+  }
 
-    container.appendChild(sparkle);
+  function burstSparkles() {
+    if (prefersReducedMotion()) return;
+    const container = document.getElementById('sparklesContainer');
+    if (!container) return;
 
-    setTimeout(() => {
-        sparkle.remove();
-    }, duration * 1000);
-}
+    for (let i = 0; i < Config.sparkle.burstCount; i++) {
+      addTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'sparkle';
 
-// ============================================
-// EVENT LISTENERS
-// ============================================
+        const x = window.innerWidth / 2 + (Math.random() - 0.5) * 200;
+        const y = window.innerHeight / 2 + (Math.random() - 0.5) * 200;
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
 
-function setupEventListeners() {
+        const tx = (Math.random() - 0.5) * 300;
+        const ty = (Math.random() - 0.5) * 300;
+        el.style.setProperty('--tx', tx + 'px');
+        el.style.setProperty('--ty', ty + 'px');
+
+        el.style.animationDuration = '1.5s';
+        container.appendChild(el);
+        addTimeout(() => el.remove(), 1500);
+      }, i * Config.sparkle.burstStepMs);
+    }
+  }
+
+  // ----------------------
+  // Interactions
+  // ----------------------
+  function setupInteractions() {
     const openBtn = document.getElementById('openBtn');
     const cardWrapper = document.getElementById('cardWrapper');
     const cardCover = document.getElementById('cardCover');
 
-    if (openBtn) {
-        openBtn.addEventListener('click', () => {
-            openCard(cardWrapper);
-        });
-    }
+    if (openBtn) addListener(openBtn, 'click', () => openCard(cardWrapper));
 
-    // Allow clicking on the cover itself to open
     if (cardCover) {
-        cardCover.addEventListener('click', (e) => {
-            if (!e.target.closest('.open-btn') && !cardWrapper.classList.contains('opened')) {
-                openCard(cardWrapper);
-            }
-        });
-        cardCover.style.cursor = 'pointer';
-    }
-
-    // Keyboard support
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !cardWrapper.classList.contains('opened')) {
-            openCard(cardWrapper);
+      cardCover.style.cursor = 'pointer';
+      addListener(cardCover, 'click', (e) => {
+        if (!State.opened && !(e.target && e.target.closest('.open-btn'))) {
+          openCard(cardWrapper);
         }
+      });
+    }
+
+    // Keyboard: Enter or Space
+    addListener(document, 'keydown', (e) => {
+      if (!State.opened && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        openCard(cardWrapper);
+      }
     });
-}
 
-// ============================================
-// CARD OPENING ANIMATION
-// ============================================
+    // Basic swipe up to open (mobile)
+    addListener(document, 'touchstart', (e) => {
+      if (State.opened) return;
+      const t0 = e.touches && e.touches[0];
+      if (!t0) return;
+      const startY = t0.clientY;
+      const onEnd = (ev) => {
+        const t1 = ev.changedTouches && ev.changedTouches[0];
+        if (!t1) return;
+        const deltaY = t1.clientY - startY;
+        if (Math.abs(deltaY) > 50 && deltaY < 0) {
+          openCard(cardWrapper);
+        }
+      };
+      addListener(document, 'touchend', onEnd, { once: true });
+    }, { passive: true });
 
-function openCard(cardWrapper) {
-    if (cardWrapper.classList.contains('opened')) return;
+    // Accessibility: keep focus on open button before opening
+    addListener(document, 'keydown', (e) => {
+      if (e.key === 'Tab' && !State.opened) {
+        const btn = document.getElementById('openBtn');
+        if (btn) btn.focus();
+      }
+    });
+  }
 
-    cardWrapper.classList.add('opened');
+  function openCard(cardWrapper) {
+    if (State.opened) return;
+    State.opened = true;
 
-    // Play sound effect if available
+    // CSS visual marker (in case we keep cover animation)
+    if (cardWrapper) cardWrapper.classList.add('opened');
+
+    // Sound + celebration (skip if reduced motion)
     playOpenSound();
+    burstSparkles();
 
-    // Create celebration effect
-    createCelebration();
+    // Redirect immediately as requested
+    redirectToMain();
+  }
 
-    // Redirect to index.html after animation completes
-    setTimeout(() => {
-        redirectToMain();
-    }, 1500); // Wait for animation to complete (0.9s) + buffer
-}
-
-function playOpenSound() {
-    // Create a simple beep sound using Web Audio API
-    try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
-    } catch (e) {
-        // Silently fail if Web Audio API is not available
-    }
-}
-
-function createCelebration() {
-    const container = document.getElementById('sparklesContainer');
-
-    // Create burst of sparkles
-    for (let i = 0; i < 30; i++) {
-        setTimeout(() => {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-
-            const x = window.innerWidth / 2 + (Math.random() - 0.5) * 200;
-            const y = window.innerHeight / 2 + (Math.random() - 0.5) * 200;
-
-            sparkle.style.left = x + 'px';
-            sparkle.style.top = y + 'px';
-
-            const tx = (Math.random() - 0.5) * 300;
-            const ty = (Math.random() - 0.5) * 300;
-
-            sparkle.style.setProperty('--tx', tx + 'px');
-            sparkle.style.setProperty('--ty', ty + 'px');
-
-            sparkle.style.animationDuration = '1.5s';
-
-            container.appendChild(sparkle);
-
-            setTimeout(() => {
-                sparkle.remove();
-            }, 1500);
-        }, i * 30);
-    }
-}
-
-// ============================================
-// COVER RENDERING (Single-face split across two panels)
-// ============================================
-
-function renderCoverFace() {
-    const tmpl = document.getElementById('coverTemplate');
-    const leftPanel = document.getElementById('leftPanel');
-    const rightPanel = document.getElementById('rightPanel');
-    if (!tmpl || !leftPanel || !rightPanel) return;
-
-    // Left half
-    const leftFrag = tmpl.content.cloneNode(true);
-    leftPanel.appendChild(leftFrag);
-
-    // Right half - shift face by 50%
-    const rightFrag = tmpl.content.cloneNode(true);
-    const face = rightFrag.querySelector('.cover-face');
-    if (face) face.classList.add('face-right');
-    rightPanel.appendChild(rightFrag);
-}
-
-// ============================================
-// MUSIC CONTROL
-// ============================================
-
-function initializeMusic() {
+  // ----------------------
+  // Music control
+  // ----------------------
+  function setupMusic() {
     const musicToggle = document.getElementById('musicToggle');
     const bgMusic = document.getElementById('bgMusic');
-
     if (!musicToggle || !bgMusic) return;
 
-    // Auto-play with user interaction
-    document.addEventListener('click', () => {
-        if (bgMusic.paused) {
-            bgMusic.play().catch(e => {
-                console.log('Autoplay prevented:', e);
-            });
-            musicToggle.classList.add('playing');
-        }
-    }, { once: true });
+    const tryPlay = () => {
+      if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+          musicToggle.classList.add('playing');
+        }).catch(() => {});
+      }
+    };
 
-    musicToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
+    addListener(document, 'click', tryPlay, { once: true });
 
-        if (bgMusic.paused) {
-            bgMusic.play().catch(e => {
-                console.log('Play failed:', e);
-            });
-            musicToggle.classList.add('playing');
-        } else {
-            bgMusic.pause();
-            musicToggle.classList.remove('playing');
-        }
+    addListener(musicToggle, 'click', (e) => {
+      e.stopPropagation();
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => {});
+      } else {
+        bgMusic.pause();
+      }
     });
 
-    // Update button state when music plays/pauses
-    bgMusic.addEventListener('play', () => {
-        musicToggle.classList.add('playing');
-    });
+    addListener(bgMusic, 'play', () => musicToggle.classList.add('playing'));
+    addListener(bgMusic, 'pause', () => musicToggle.classList.remove('playing'));
+  }
 
-    bgMusic.addEventListener('pause', () => {
-        musicToggle.classList.remove('playing');
-    });
-}
+  function playOpenSound() {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      const audioContext = new Ctx();
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.frequency.value = 800;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      osc.start();
+      addTimeout(() => {
+        osc.stop();
+        audioContext.close();
+      }, 300);
+    } catch (_) { /* ignore */ }
+  }
 
-// ============================================
-// CARD REDIRECT
-// ============================================
-
-function redirectToMain() {
-    // Fade out then navigate
-    document.body.style.transition = 'opacity 0.5s ease';
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 500);
-}
-
-// ============================================
-// TOUCH/SWIPE SUPPORT
-// ============================================
-
-document.addEventListener('touchstart', function(e) {
-    const cardWrapper = document.getElementById('cardWrapper');
-    if (cardWrapper && !cardWrapper.classList.contains('opened')) {
-        const touch = e.touches[0];
-        const startX = touch.clientX;
-        const startY = touch.clientY;
-
-        document.addEventListener('touchend', function(e) {
-            const touch = e.changedTouches[0];
-            const endX = touch.clientX;
-            const endY = touch.clientY;
-
-            const deltaX = endX - startX;
-            const deltaY = endY - startY;
-
-            // Swipe up or tap
-            if (Math.abs(deltaY) > 50 && deltaY < 0) {
-                openCard(cardWrapper);
-            }
-        }, { once: true });
+  // ----------------------
+  // Navigation
+  // ----------------------
+  function redirectToMain() {
+    // Respect reduced motion
+    const doFade = !prefersReducedMotion();
+    if (doFade) {
+      document.body.style.transition = `opacity ${Config.fadeOutMs}ms ease`;
+      document.body.style.opacity = '0';
+      addTimeout(() => navigate(), Config.fadeOutMs);
+    } else {
+      navigate();
     }
-});
+  }
 
-// ============================================
-// ACCESSIBILITY
-// ============================================
-
-// Ensure proper focus management
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Tab') {
-        const cardWrapper = document.getElementById('cardWrapper');
-        const openBtn = document.getElementById('openBtn');
-
-        if (cardWrapper && !cardWrapper.classList.contains('opened') && openBtn) {
-            openBtn.focus();
-        }
+  function navigate() {
+    // Stop background activity to speed up navigation
+    cleanup();
+    try {
+      window.location.assign(Config.redirectTarget);
+    } catch (_) {
+      window.location.href = Config.redirectTarget;
     }
-});
+  }
 
+  // ----------------------
+  // Perf: prefetch main page
+  // ----------------------
+  function prefetchMain() {
+    try {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = Config.redirectTarget;
+      document.head.appendChild(link);
+    } catch (_) { /* ignore */ }
+  }
+})();
