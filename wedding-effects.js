@@ -629,9 +629,11 @@ function initializeWeddingEffects() {
     // Thêm hiệu ứng cho các phần tử cụ thể
     addWaveEffect('.countdown-item');
 
-    // Premium theme (luxury) enhancements
-    enablePremiumTheme();
-    startGoldenParticles();
+    // Premium theme (luxury) enhancements (opt-in)
+    if (document.body.classList.contains('premium-theme')) {
+        enablePremiumTheme();
+        startGoldenParticles();
+    }
     
     console.log('✨ Wedding Effects Ready!');
 }
