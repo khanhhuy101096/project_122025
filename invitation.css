@@ -768,15 +768,15 @@ body {
         font-size: 12px;
     }
 
-    /* Keep the open button always visible on mobile in-app browsers */
+    /* Place button at bottom of the card on mobile */
     .open-btn {
-        position: fixed;
+        position: absolute;
         left: 50%;
         transform: translateX(-50%);
         font-size: 16px;
         padding: 14px 34px;
-        bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
-        z-index: 999;
+        bottom: 16px;
+        z-index: 1000;
     }
 
     .panel-decoration {
