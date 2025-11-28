@@ -593,13 +593,14 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 10px;
     box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
     transition: all 0.3s ease;
-    z-index: 8;
+    z-index: 1000;
     letter-spacing: 1px;
+    pointer-events: auto;
 }
 
 .open-btn:hover {
